@@ -6,25 +6,26 @@
 
 window.addEventListener("load", function() {
    fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
-
       response.json().then(function(json){
          const div = document.getElementById("missionTarget");
+         let i = Math.floor(Math.random()*json.length);
          div.innerHTML = `
          <h2>Mission Destination</h2>
          <ol>
-            <li>Name: ${json[3].name}</li>
-            <li>Diameter: ${json[3].diameter}</li>
-            <li>Star: ${json[3].star}</li>
-            <li>Distance from Earth: ${json[3].distance}</li>
-            <li>Number of Moons: ${json[3].moons}</li>
+            <li>Name: ${json[i].name}</li>
+            <li>Diameter: ${json[i].diameter}</li>
+            <li>Star: ${json[i].star}</li>
+            <li>Distance from Earth: ${json[i].distance}</li>
+            <li>Number of Moons: ${json[i].moons}</li>
          </ol>
-         <img src="${json[3].image}">
+         <img src="${json[i].image}">
             `;
       });
    });
 
    let form = document.querySelector("form");
    form.addEventListener("submit", function(event) {
+      event.preventDefault();
       let pilotNameInput = document.querySelector("input[name=pilotName]");
       let copilotNameInput = document.querySelector("input[name=copilotName]");
       let fuelLevelInput = document.querySelector("input[name=fuelLevel]");
@@ -39,26 +40,20 @@ window.addEventListener("load", function() {
       
       if (pilotNameInput.value === "" || copilotNameInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value === "") {
          alert("Invalid input. All fields required.");
-         event.preventDefault();
       }
        if (!isNaN (pilotNameInput.value)) {
-         alert("Invalid input. Pilot name must consist of only letters.")
-         event.preventDefault();
+         alert("Invalid input. Pilot name must consist of only letters.");
       }
        if (!isNaN (copilotNameInput.value)) {
-         alert("Invalid input. Co-Pilot name must consist of only letters.")
-         event.preventDefault();
+         alert("Invalid input. Co-Pilot name must consist of only letters.");
       }
       
        if (isNaN(fuelLevelInput.value)) {
          alert("Invalid input. Fuel level must be valid number.");
-         event.preventDefault();
       }
       
       if (isNaN (cargoMassInput.value)) {
          alert("Invalid input. Cargo mass must be valid number.");
-         event.preventDefault();
-
       }
       pilotStatus.innerHTML = `Pilot ${pilotNameInput.value} Ready`;
       copilotStatus.innerHTML = `Co-pilot ${copilotNameInput.value} Ready`;
@@ -67,17 +62,14 @@ window.addEventListener("load", function() {
          fuelStatus.innerHTML = "Fuel level too low for launch";
          launchStatus.innerHTML = "Shuttle Not Ready For Launch";
          launchStatus.style.color =  "red";
-         event.preventDefault();
       } else if (cargoMassInput.value > 10000) {
          faultyItems.style.visibility = "visible";
          cargoStatus.innerHTML = "Cargo mass too high for launch";
          launchStatus.innerHTML = "Shuttle Not Ready For Launch";
          launchStatus.style.color =  "red";
-         event.preventDefault();
       } else { 
          launchStatus.innerHTML = "Shuttle is ready for launch";
          launchStatus.style.color = "green";
-         event.preventDefault();
       }
 
    });
